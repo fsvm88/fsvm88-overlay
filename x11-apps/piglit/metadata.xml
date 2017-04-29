@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>x11</herd>
+	<upstream>
+	<maintainer>
+		<email></email>
+		<name></name>
+		<description>Maintainer. Assign bugs to him</description>
+	</maintainer>
+	<maintainer>
+		<email></email>
+		<name></name>
+		<description>Proxy maintainer. CC him on bugs</description>
+	</maintainer>
+	<maintainer>
+		<email></email>
+		<name></name>
+	</maintainer>
+	<longdescription lang="en">
+		Piglit is an open-source test suite for OpenGL and OpenCL implementations.
+	</longdescription>
+</pkgmetadata>

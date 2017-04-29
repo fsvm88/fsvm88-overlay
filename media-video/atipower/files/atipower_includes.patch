@@ -1,0 +1,9 @@
+diff -purN atipower-0.1.orig/atipower.c atipower-0.1/atipower.c
+--- atipower-0.1.orig/atipower.c	2006-10-18 20:48:19.000000000 +0200
++++ atipower-0.1/atipower.c	2008-05-09 12:29:28.000000000 +0200
+@@ -1,4 +1,4 @@
+-#include <FGLRXExtensions.h>
++#include "FGLRXExtensions.h"
+ 
+ int main(int ac,char *av[]) {
+   int ret=0,i;

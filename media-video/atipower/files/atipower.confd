@@ -1,0 +1,6 @@
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+# Please run `atipower` without arguments to have a list of all available powerstates on your hardware
+# After that insert the number you wish to have selected
+ATIPOWER_OPTS=""
