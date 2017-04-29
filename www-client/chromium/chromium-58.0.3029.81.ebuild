@@ -408,7 +408,7 @@ src_configure() {
 	# Never use bundled gold binary. Disable gold linker flags for now.
 	# Do not use bundled clang.
 	# Trying to use gold results in linker crash.
-	myconf_gn+="use_gold=true use_sysroot=false linux_use_bundled_binutils=false allow_posix_link_time_opt=true use_lld=false use_thin_lto=false"
+	myconf_gn+=" use_gold=false use_sysroot=false linux_use_bundled_binutils=false allow_link_time_opt=true allow_posix_link_time_opt=true"
 
 	ffmpeg_branding="$(usex proprietary-codecs Chrome Chromium)"
 	myconf_gn+=" proprietary_codecs=$(usex proprietary-codecs true false)"
