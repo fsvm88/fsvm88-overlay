@@ -1,0 +1,22 @@
+diff -Nuar ppp-2.4.7.orig/pppd/plugins/pppol2tp/openl2tp.c ppp-2.4.7/pppd/plugins/pppol2tp/openl2tp.c
+--- ppp-2.4.7.orig/pppd/plugins/pppol2tp/openl2tp.c	2014-08-09 12:31:39.000000000 +0000
++++ ppp-2.4.7/pppd/plugins/pppol2tp/openl2tp.c	2017-04-30 16:12:28.181645098 +0000
+@@ -47,7 +47,6 @@
+ #include <linux/if_ether.h>
+ #include <linux/ppp_defs.h>
+ #include <linux/if_ppp.h>
+-#include <linux/if_pppox.h>
+ #include <linux/if_pppol2tp.h>
+ 
+ #include "l2tp_event.h"
+diff -Nuar ppp-2.4.7.orig/pppd/plugins/pppol2tp/pppol2tp.c ppp-2.4.7/pppd/plugins/pppol2tp/pppol2tp.c
+--- ppp-2.4.7.orig/pppd/plugins/pppol2tp/pppol2tp.c	2014-08-09 12:31:39.000000000 +0000
++++ ppp-2.4.7/pppd/plugins/pppol2tp/pppol2tp.c	2017-04-30 16:12:16.926667075 +0000
+@@ -46,7 +46,6 @@
+ #include <linux/if_ether.h>
+ #include <linux/ppp_defs.h>
+ #include <linux/if_ppp.h>
+-#include <linux/if_pppox.h>
+ #include <linux/if_pppol2tp.h>
+ 
+ /* should be added to system's socket.h... */
