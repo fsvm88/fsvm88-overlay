@@ -1,0 +1,26 @@
+diff -Nuar serf-9999.orig/SConstruct serf-9999/SConstruct
+--- serf-9999.orig/SConstruct	2018-04-12 21:29:31.364383681 +0200
++++ serf-9999/SConstruct	2018-04-12 21:31:30.383377097 +0200
+@@ -250,8 +250,7 @@
+ else:
+   SHLIBNAME = '%sserf-%d' % (env['SHLIBPREFIX'], MAJOR)
+ 
+-env.Append(RPATH=[libdir],
+-           PDB='${TARGET.filebase}.pdb')
++env.Append(PDB='${TARGET.filebase}.pdb')
+ 
+ if sys.platform != 'win32':
+   def CheckGnuCC(context):
+@@ -498,12 +497,6 @@
+ if disablelogging:
+     env.Append(CPPDEFINES=['SERF_DISABLE_LOGGING'])
+ 
+-# On some systems, the -R values that APR describes never make it into actual
+-# RPATH flags. We'll manually map all directories in LIBPATH into new
+-# flags to set RPATH values.
+-for d in env['LIBPATH']:
+-  env.Append(RPATH=[':'+d])
+-
+ # Set up the construction of serf-*.pc
+ pkgconfig = env.Textfile('serf-%d.pc' % (MAJOR,),
+                          env.File('build/serf.pc.in'),
