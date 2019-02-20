@@ -1,0 +1,13 @@
+diff -Nuar rustc-1.32.0-src.orig/src/bootstrap/lib.rs rustc-1.32.0-src/src/bootstrap/lib.rs
+--- rustc-1.32.0-src.orig/src/bootstrap/lib.rs	2019-01-16 10:30:27.000000000 +0100
++++ rustc-1.32.0-src/src/bootstrap/lib.rs	2019-02-17 13:28:35.415384231 +0100
+@@ -779,7 +779,8 @@
+         // cc-rs because the build scripts will determine that for themselves.
+         let mut base = self.cc[&target].args().iter()
+                            .map(|s| s.to_string_lossy().into_owned())
+-                           .filter(|s| !s.starts_with("-O") && !s.starts_with("/O"))
++                           .filter(|s| !s.starts_with("-O") && !s.starts_with("/O")
++                               && !s.starts_with("-static"))
+                            .collect::<Vec<String>>();
+ 
+         // If we're compiling on macOS then we add a few unconditional flags
