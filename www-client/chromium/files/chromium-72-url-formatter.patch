@@ -1,0 +1,69 @@
+diff -Nuar chromium-72.0.3626.28.orig/components/url_formatter/url_formatter.cc chromium-72.0.3626.28/components/url_formatter/url_formatter.cc
+--- chromium-72.0.3626.28.orig/components/url_formatter/url_formatter.cc	2018-12-19 22:49:00.000000000 +0100
++++ chromium-72.0.3626.28/components/url_formatter/url_formatter.cc	2019-01-13 23:23:37.426699454 +0100
+@@ -419,8 +419,7 @@
+ const FormatUrlType kFormatUrlOmitFileScheme = 1 << 7;
+ 
+ const FormatUrlType kFormatUrlOmitDefaults =
+-    kFormatUrlOmitUsernamePassword | kFormatUrlOmitHTTP |
+-    kFormatUrlOmitTrailingSlashOnBareHostname;
++    kFormatUrlOmitNothing;
+ 
+ base::string16 FormatUrl(const GURL& url,
+                          FormatUrlTypes format_types,
+@@ -493,8 +492,7 @@
+   new_parsed->scheme = parsed.scheme;
+ 
+   // Username & password.
+-  if (((format_types & kFormatUrlOmitUsernamePassword) != 0) ||
+-      ((format_types & kFormatUrlTrimAfterHost) != 0)) {
++  if (false) {
+     // Remove the username and password fields. We don't want to display those
+     // to the user since they can be used for attacks,
+     // e.g. "http://google.com:search@evil.ru/"
+@@ -535,8 +533,7 @@
+     *prefix_end = static_cast<size_t>(url_string.length());
+ 
+   // Host.
+-  bool trim_trivial_subdomains =
+-      (format_types & kFormatUrlOmitTrivialSubdomains) != 0;
++  bool trim_trivial_subdomains = false;
+   AppendFormattedComponent(spec, parsed.host,
+                            HostComponentTransform(trim_trivial_subdomains),
+                            &url_string, &new_parsed->host, adjustments);
+@@ -553,8 +550,7 @@
+   }
+ 
+   // Path & query.  Both get the same general unescape & convert treatment.
+-  if ((format_types & kFormatUrlTrimAfterHost) && url.IsStandard() &&
+-      !url.SchemeIsFile() && !url.SchemeIsFileSystem()) {
++  if (false) {
+     size_t trimmed_length = parsed.path.len;
+     // Remove query and the '?' delimeter.
+     if (parsed.query.is_valid())
+@@ -567,8 +563,7 @@
+     adjustments->push_back(
+         base::OffsetAdjuster::Adjustment(parsed.path.begin, trimmed_length, 0));
+ 
+-  } else if ((format_types & kFormatUrlOmitTrailingSlashOnBareHostname) &&
+-             CanStripTrailingSlash(url)) {
++  } else if (false) {
+     // Omit the path, which is a single trailing slash. There's no query or ref.
+     if (parsed.path.len > 0) {
+       adjustments->push_back(base::OffsetAdjuster::Adjustment(
+@@ -600,14 +595,7 @@
+   // the formatted URL is directly pre-filled into an input field.)  For this
+   // reason we avoid stripping schemes in this case.
+   const char kFTP[] = "ftp.";
+-  bool strip_scheme =
+-      !base::StartsWith(url.host(), kFTP, base::CompareCase::SENSITIVE) &&
+-      (((format_types & kFormatUrlOmitHTTP) &&
+-        url.SchemeIs(url::kHttpScheme)) ||
+-       ((format_types & kFormatUrlOmitHTTPS) &&
+-        url.SchemeIs(url::kHttpsScheme)) ||
+-       ((format_types & kFormatUrlOmitFileScheme) &&
+-        url.SchemeIs(url::kFileScheme)));
++  bool strip_scheme = false;
+ 
+   // If we need to strip out schemes do it after the fact.
+   if (strip_scheme) {
