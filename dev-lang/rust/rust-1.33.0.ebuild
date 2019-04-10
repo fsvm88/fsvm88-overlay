@@ -46,6 +46,10 @@ COMMON_DEPEND=">=app-eselect/eselect-rust-0.3_pre20150425
 		system-llvm? ( >=sys-devel/llvm-7:=[${LLVM_TARGET_USEDEPS// /,}] )"
 DEPEND="${COMMON_DEPEND}
 	${PYTHON_DEPS}
+	elibc_musl? ( 
+		>=dev-libs/libexecinfo-1.1
+		>=sys-devel/llvm-libunwind-8.0.0
+	)
 	|| (
 		>=sys-devel/gcc-4.7
 		>=sys-devel/clang-3.5
