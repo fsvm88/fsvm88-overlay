@@ -3,19 +3,18 @@
 
 EAPI=6
 
-LLVM_MAX_SLOT=7
 PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
+LLVM_MAX_SLOT=8
 
-inherit llvm multiprocessing python-any-r1 toolchain-funcs versionator
+inherit eapi7-ver llvm multiprocessing python-any-r1 toolchain-funcs
 
-ABI_VER="$(get_version_component_range 1-2)"
+ABI_VER="$(ver_cut 1-2)"
 SLOT="stable/${ABI_VER}"
 MY_P="rustc-${PV}"
 SRC="${MY_P}-src.tar.xz"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 
-#RUST_STAGE0_VERSION="1.$(($(get_version_component_range 2) - 1)).1"
-RUST_STAGE0_VERSION="1.30.1"
+RUST_STAGE0_VERSION="1.$(($(ver_cut 2) - 1)).0"
 
 DESCRIPTION="Systems programming language from Mozilla"
 HOMEPAGE="https://www.rust-lang.org/"
@@ -24,7 +23,6 @@ SRC_URI="https://static.rust-lang.org/dist/${SRC} -> rustc-${PV}-src.tar.xz
 	amd64? ( https://portage.smaeul.xyz/distfiles/rust-${RUST_STAGE0_VERSION}-x86_64-gentoo-linux-musl.tar.xz )
 	arm? ( https://portage.smaeul.xyz/distfiles/rust-${RUST_STAGE0_VERSION}-armv7a-unknown-linux-musleabihf.tar.xz )
 	arm64? ( https://portage.smaeul.xyz/distfiles/rust-${RUST_STAGE0_VERSION}-aarch64-gentoo-linux-musl.tar.xz )
-	ppc? ( https://portage.smaeul.xyz/distfiles/rust-${RUST_STAGE0_VERSION}-powerpc-gentoo-linux-musl.tar.xz )
 	ppc64? ( https://portage.smaeul.xyz/distfiles/rust-${RUST_STAGE0_VERSION}-powerpc64-gentoo-linux-musl.tar.xz )
 	x86? ( https://portage.smaeul.xyz/distfiles/rust-${RUST_STAGE0_VERSION}-i686-gentoo-linux-musl.tar.xz )
 "
@@ -36,17 +34,16 @@ LLVM_TARGET_USEDEPS=${ALL_LLVM_TARGETS[@]/%/?}
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 
-IUSE="clippy cpu_flags_x86_sse2 debug doc jemalloc libressl rls rustfmt system-llvm ${ALL_LLVM_TARGETS[*]}"
+IUSE="clippy cpu_flags_x86_sse2 debug doc libressl rls rustfmt system-llvm ${ALL_LLVM_TARGETS[*]}"
 
 COMMON_DEPEND=">=app-eselect/eselect-rust-0.3_pre20150425
-		jemalloc? ( dev-libs/jemalloc )
 		!libressl? ( dev-libs/openssl:0= )
 		libressl? ( dev-libs/libressl:0= )
 		net-libs/http-parser:=
 		net-libs/libssh2:=
 		net-misc/curl:=[ssl]
 		sys-libs/zlib:=
-		system-llvm? ( >=sys-devel/llvm-6:=[${LLVM_TARGET_USEDEPS// /,}] )"
+		system-llvm? ( >=sys-devel/llvm-7:=[${LLVM_TARGET_USEDEPS// /,}] )"
 DEPEND="${COMMON_DEPEND}
 	${PYTHON_DEPS}
 	|| (
@@ -71,18 +68,17 @@ PATCHES=(
 	"${FILESDIR}/0003-Allow-rustdoc-to-work-when-cross-compiling-on-musl.patch"
 	"${FILESDIR}/0004-Require-static-native-libraries-when-linking-static-.patch"
 	"${FILESDIR}/0005-Remove-nostdlib-and-musl_root-from-musl-targets.patch"
-	"${FILESDIR}/0011-rustc_data_structures-use-libc-types-constants-in-fl.patch"
-	"${FILESDIR}/0012-runtest-Fix-proc-macro-tests-on-musl-hosts.patch"
-	"${FILESDIR}/0015-test-linkage-visibility-Ensure-symbols-are-visible-t.patch"
-	"${FILESDIR}/0016-test-target-feature-gate-Only-run-on-relevant-target.patch"
-	"${FILESDIR}/0017-test-use-extern-for-plugins-Don-t-assume-multilib.patch"
-	"${FILESDIR}/0018-test-sysroot-crates-are-unstable-Fix-test-when-rpath.patch"
-	"${FILESDIR}/0019-Ignore-broken-and-non-applicable-tests.patch"
-	"${FILESDIR}/0020-Link-stage-2-tools-dynamically-to-libstd.patch"
-	"${FILESDIR}/0021-Move-debugger-scripts-to-usr-share-rust.patch"
-	"${FILESDIR}/0022-Add-gentoo-target-specs.patch"
+#	"${FILESDIR}/0006-Prefer-libgcc_eh-over-libunwind-for-musl.patch"
+	"${FILESDIR}/0007-runtest-Fix-proc-macro-tests-on-musl-hosts.patch"
+#	"${FILESDIR}/0008-LLVM-8.0-compatibility.patch"
+	"${FILESDIR}/0009-Correct-minimum-system-LLVM-version-in-tests.patch"
+	"${FILESDIR}/0010-test-use-extern-for-plugins-Don-t-assume-multilib.patch"
+	"${FILESDIR}/0011-test-sysroot-crates-are-unstable-Fix-test-when-rpath.patch"
+	"${FILESDIR}/0012-Ignore-broken-and-non-applicable-tests.patch"
+	"${FILESDIR}/0013-Link-stage-2-tools-dynamically-to-libstd.patch"
+	"${FILESDIR}/0014-Move-debugger-scripts-to-usr-share-rust.patch"
+	"${FILESDIR}/0015-Add-gentoo-target-specs.patch"
 	"${FILESDIR}/0030-liblibc-linkage.patch"
-	"${FILESDIR}/0031-liblibc-1b130d4c349d.patch"
 	"${FILESDIR}/0040-rls-atomics.patch"
 	"${FILESDIR}/0050-llvm.patch"
 	"${FILESDIR}/0051-llvm-D45520.patch"
@@ -115,7 +111,7 @@ src_prepare() {
 	"${WORKDIR}/rust-${RUST_STAGE0_VERSION}-${CHOST}/install.sh" \
 		--destdir="${WORKDIR}/stage0" \
 		--prefix=/ \
-		--components=rust-std-${CHOST},rustc,cargo \
+		--components=rust-std-$CHOST,rustc,cargo \
 		--disable-ldconfig \
 		|| die
 }
@@ -136,6 +132,8 @@ src_configure() {
 		release-debuginfo = $(toml_usex debug)
 		assertions = $(toml_usex debug)
 		targets = "${LLVM_TARGETS// /;}"
+		link-shared = false
+		use-libcxx = true
 		[build]
 		build = "${CHOST}"
 		host = ["${CHOST}"]
@@ -148,7 +146,7 @@ src_configure() {
 		python = "${EPYTHON}"
 		locked-deps = true
 		vendor = true
-		verbose = 0
+		verbose = 1
 		sanitizers = false
 		profiler = false
 		extended = true
@@ -162,12 +160,12 @@ src_configure() {
 		optimize = $(toml_usex !debug)
 		debuginfo = $(toml_usex debug)
 		debug-assertions = $(toml_usex debug)
-		use-jemalloc = $(toml_usex jemalloc)
 		default-linker = "$(tc-getCC)"
 		channel = "stable"
 		rpath = false
 		optimize-tests = $(toml_usex !debug)
 		dist-src = false
+		jemalloc = false
 		[dist]
 		src-tarball = false
 		[target.${CHOST}]
@@ -175,14 +173,16 @@ src_configure() {
 		cxx = "$(tc-getCXX)"
 		linker = "$(tc-getCC)"
 		ar = "$(tc-getAR)"
+		crt-static = false
 	EOF
+	#no_std = true
 	use system-llvm && cat <<- EOF >> "${S}"/config.toml
 		llvm-config = "$(get_llvm_prefix "$LLVM_MAX_SLOT")/bin/llvm-config"
 	EOF
 }
 
 src_compile() {
-	"${EPYTHON}" x.py build --config="${S}"/config.toml -j$(makeopts_jobs) || die
+	"${EPYTHON}" x.py build --verbose --config="${S}"/config.toml -j$(makeopts_jobs) --exclude src/tools/miri || die
 }
 
 src_test() {
@@ -190,9 +190,7 @@ src_test() {
 		src/test/codegen \
 		src/test/codegen-units \
 		src/test/compile-fail \
-		src/test/compile-fail-fulldeps \
 		src/test/incremental \
-		src/test/incremental-fulldeps \
 		src/test/mir-opt \
 		src/test/pretty \
 		src/test/run-fail \
@@ -263,15 +261,15 @@ src_install() {
 		/usr/bin/rust-lldb
 	EOF
 	if use clippy; then
-	    echo /usr/bin/cargo-clippy >> "${T}/provider-${P}"
-	    echo /usr/bin/clippy-driver >> "${T}/provider-${P}"
+		echo /usr/bin/cargo-clippy >> "${T}/provider-${P}"
+		echo /usr/bin/clippy-driver >> "${T}/provider-${P}"
 	fi
 	if use rls; then
-	    echo /usr/bin/rls >> "${T}/provider-${P}"
+		echo /usr/bin/rls >> "${T}/provider-${P}"
 	fi
 	if use rustfmt; then
-	    echo /usr/bin/cargo-fmt >> "${T}/provider-${P}"
-	    echo /usr/bin/rustfmt >> "${T}/provider-${P}"
+		echo /usr/bin/cargo-fmt >> "${T}/provider-${P}"
+		echo /usr/bin/rustfmt >> "${T}/provider-${P}"
 	fi
 	dodir /etc/env.d/rust
 	insinto /etc/env.d/rust
