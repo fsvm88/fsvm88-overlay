@@ -1,0 +1,17 @@
+--- qtwebengine-everywhere-src-5.12.1.orig/src/3rdparty/gn/build/gen.py	2019-01-16 11:59:47.000000000 +0100
++++ qtwebengine-everywhere-src-5.12.1/src/3rdparty/gn/build/gen.py	2019-03-16 13:55:40.381104983 +0100
+@@ -373,13 +373,13 @@
+         cflags.append('--sysroot=' + linux_sysroot)
+         ldflags.append('--sysroot=' + linux_sysroot)
+       ldflags.extend([
+-          '-static-libstdc++',
+           '-Wl,--as-needed',
+       ])
+       libs.extend([
+           # These are needed by libc++.
+           '-ldl',
+           '-lpthread',
++          '-lc++',
+       ])
+     elif platform.is_darwin():
+       min_mac_version_flag = '-mmacosx-version-min=10.9'
