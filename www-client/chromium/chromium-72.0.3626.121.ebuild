@@ -17,8 +17,8 @@ SRC_URI="https://commondatastorage.googleapis.com/chromium-browser-official/${P}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 x86"
-IUSE="component-build cups gnome-keyring +hangouts jumbo-build kerberos neon pic +proprietary-codecs pulseaudio selinux +suid +system-ffmpeg +system-icu +system-libvpx +tcmalloc widevine"
+KEYWORDS="amd64 ~x86"
+IUSE="+closure-compile component-build cups gnome-keyring +hangouts jumbo-build kerberos neon pic +proprietary-codecs pulseaudio selinux +suid +system-ffmpeg +system-icu +system-libvpx +tcmalloc widevine"
 RESTRICT="!system-ffmpeg? ( proprietary-codecs? ( bindist ) )"
 
 COMMON_DEPEND="
@@ -104,8 +104,8 @@ BDEPEND="
 	>=net-libs/nodejs-7.6.0[inspector]
 	sys-apps/hwids[usb(+)]
 	>=sys-devel/bison-2.4.3
-	elibc_musl? ( sys-libs/queue-standalone )
 	sys-devel/flex
+	closure-compile? ( virtual/jre )
 	virtual/pkgconfig
 "
 
@@ -139,32 +139,8 @@ GTK+ icon theme.
 "
 
 PATCHES=(
-	"${FILESDIR}/chromium-72-url-formatter.patch"
 	"${FILESDIR}/chromium-compiler-r7.patch"
 	"${FILESDIR}/chromium-widevine-r4.patch"
-	"${FILESDIR}/chromium-webrtc-r0.patch"
-	"${FILESDIR}/chromium-memcpy-r0.patch"
-	"${FILESDIR}/chromium-math.h-r0.patch"
-	"${FILESDIR}/chromium-stdint.patch"
-	"${FILESDIR}/musl-cdefs-r2.patch"
-	"${FILESDIR}/musl-dlopen.patch"
-	"${FILESDIR}/musl-dns-r2.patch"
-	"${FILESDIR}/musl-execinfo-r8.patch"
-	"${FILESDIR}/musl-fpstate-r1.patch"
-	"${FILESDIR}/musl-headers-r1.patch"
-	"${FILESDIR}/musl-libcpp.patch"
-	"${FILESDIR}/musl-mallinfo-r7.patch"
-	"${FILESDIR}/musl-pthread-r5.patch"
-	"${FILESDIR}/musl-ptrace.patch"
-	"${FILESDIR}/musl-sandbox-r3.patch"
-	"${FILESDIR}/musl-secure_getenv-r1.patch"
-	"${FILESDIR}/musl-siginfo.patch"
-	"${FILESDIR}/musl-socket.patch"
-	"${FILESDIR}/musl-stacksize-r3.patch"
-	"${FILESDIR}/musl-stacktrace-r2.patch"
-	"${FILESDIR}/musl-syscall.patch"
-	"${FILESDIR}/musl-ucontext-r1.patch"
-	"${FILESDIR}/musl-wordsize-r1.patch"
 )
 
 pre_build_checks() {
@@ -445,16 +421,13 @@ src_configure() {
 	# https://chromium.googlesource.com/chromium/src/+/lkcr/docs/jumbo.md
 	myconf_gn+=" use_jumbo_build=$(usex jumbo-build true false)"
 	if use jumbo-build; then
-		myconf_gn+=" jumbo_file_merge_limit=200"
+		myconf_gn+=" jumbo_file_merge_limit=300"
 	fi
 
 	myconf_gn+=" use_allocator=$(usex tcmalloc \"tcmalloc\" \"none\")"
 
 	# Disable nacl, we can't build without pnacl (http://crbug.com/269560).
 	myconf_gn+=" enable_nacl=false"
-
-	# Nobody wants java in the build system. Get rid of it BGO 672778
-	myconf_gn+=" closure_compile=false"
 
 	# Use system-provided libraries.
 	# TODO: freetype -- remove sources (https://bugs.chromium.org/p/pdfium/issues/detail?id=733).
@@ -498,6 +471,7 @@ src_configure() {
 	myconf_gn+=" use_system_harfbuzz=true"
 
 	# Optional dependencies.
+	myconf_gn+=" closure_compile=$(usex closure-compile true false)"
 	myconf_gn+=" enable_hangout_services_extension=$(usex hangouts true false)"
 	myconf_gn+=" enable_widevine=$(usex widevine true false)"
 	myconf_gn+=" use_cups=$(usex cups true false)"
@@ -580,11 +554,6 @@ src_configure() {
 
 	# https://bugs.gentoo.org/588596
 	#append-cxxflags $(test-flags-CXX -fno-delete-null-pointer-checks)
-
-	# musl does not support malloc interposition
-	if use elibc_musl; then
-		myconf_gn+=" use_allocator_shim=false"
-	fi
 
 	# Bug 491582.
 	export TMPDIR="${WORKDIR}/temp"

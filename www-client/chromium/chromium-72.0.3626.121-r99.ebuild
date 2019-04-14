@@ -13,19 +13,21 @@ inherit check-reqs chromium-2 desktop flag-o-matic multilib ninja-utils pax-util
 DESCRIPTION="Open-source version of Google Chrome web browser"
 HOMEPAGE="http://chromium.org/"
 SRC_URI="https://commondatastorage.googleapis.com/chromium-browser-official/${P}.tar.xz
-	https://dev.gentoo.org/~floppym/dist/chromium-webrtc-includes.patch.xz"
+	https://dev.gentoo.org/~floppym/dist/chromium-webrtc-includes-r1.patch.xz"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="component-build cups gnome-keyring +hangouts jumbo-build kerberos neon pic +proprietary-codecs pulseaudio selinux +suid +system-ffmpeg +system-icu +system-libvpx +tcmalloc widevine"
+IUSE="+atk +closure-compile component-build cups +dbus gnome-keyring +hangouts jumbo-build kerberos neon pic +proprietary-codecs pulseaudio selinux +suid +system-ffmpeg +system-icu +system-libvpx +tcmalloc widevine"
 RESTRICT="!system-ffmpeg? ( proprietary-codecs? ( bindist ) )"
 
+REQUIRED_USE="atk? ( dbus )"
+
 COMMON_DEPEND="
-	>=app-accessibility/at-spi2-atk-2.26:2
+	atk? ( >=app-accessibility/at-spi2-atk-2.26:2 )
 	app-arch/bzip2:=
 	cups? ( >=net-print/cups-1.3.11:= )
-	>=dev-libs/atk-2.26
+	atk? ( >=dev-libs/atk-2.26 )
 	dev-libs/expat:=
 	dev-libs/glib:2
 	system-icu? ( >=dev-libs/icu-59:= )
@@ -53,7 +55,7 @@ COMMON_DEPEND="
 		!=net-fs/samba-4.5.12-r0
 		media-libs/opus:=
 	)
-	sys-apps/dbus:=
+	dbus? ( sys-apps/dbus:= )
 	sys-apps/pciutils:=
 	virtual/udev
 	x11-libs/cairo:=
@@ -93,7 +95,10 @@ DEPEND="${COMMON_DEPEND}
 "
 BDEPEND="
 	>=app-arch/gzip-1.7
-	!arm? (
+	amd64? (
+		dev-lang/yasm
+	)
+	x86? (
 		dev-lang/yasm
 	)
 	dev-lang/perl
@@ -104,8 +109,9 @@ BDEPEND="
 	>=net-libs/nodejs-7.6.0[inspector]
 	sys-apps/hwids[usb(+)]
 	>=sys-devel/bison-2.4.3
-	elibc_musl? ( sys-libs/queue-standalone )
 	sys-devel/flex
+	elibc_musl? ( sys-libs/queue-standalone )
+	closure-compile? ( virtual/jre )
 	virtual/pkgconfig
 "
 
@@ -139,13 +145,11 @@ GTK+ icon theme.
 "
 
 PATCHES=(
-	"${FILESDIR}/chromium-72-url-formatter.patch"
 	"${FILESDIR}/chromium-compiler-r7.patch"
 	"${FILESDIR}/chromium-widevine-r4.patch"
-	"${FILESDIR}/chromium-webrtc-r0.patch"
-	"${FILESDIR}/chromium-memcpy-r0.patch"
-	"${FILESDIR}/chromium-math.h-r0.patch"
-	"${FILESDIR}/chromium-stdint.patch"
+	"${FILESDIR}/chromium-optional-atk-r1.patch"
+	"${FILESDIR}/chromium-optional-dbus-r5.patch"
+	"${FILESDIR}/chromium-url-formatter.patch"
 	"${FILESDIR}/musl-cdefs-r2.patch"
 	"${FILESDIR}/musl-dlopen.patch"
 	"${FILESDIR}/musl-dns-r2.patch"
@@ -209,11 +213,14 @@ src_prepare() {
 	default
 
 	pushd third_party/webrtc >/dev/null || die
-	eapply "${WORKDIR}"/chromium-webrtc-includes.patch
+	eapply "${WORKDIR}"/chromium-webrtc-includes-r1.patch
 	popd >/dev/null || die
 
 	mkdir -p third_party/node/linux/node-linux-x64/bin || die
 	ln -s "${EPREFIX}"/usr/bin/node third_party/node/linux/node-linux-x64/bin/node || die
+
+	# These can cause the final link to take several hours.
+	filter-ldflags "*sort*"
 
 	local keeplibs=(
 		base/third_party/dmg_fp
@@ -445,16 +452,13 @@ src_configure() {
 	# https://chromium.googlesource.com/chromium/src/+/lkcr/docs/jumbo.md
 	myconf_gn+=" use_jumbo_build=$(usex jumbo-build true false)"
 	if use jumbo-build; then
-		myconf_gn+=" jumbo_file_merge_limit=200"
+		myconf_gn+=" jumbo_file_merge_limit=300"
 	fi
 
 	myconf_gn+=" use_allocator=$(usex tcmalloc \"tcmalloc\" \"none\")"
 
 	# Disable nacl, we can't build without pnacl (http://crbug.com/269560).
 	myconf_gn+=" enable_nacl=false"
-
-	# Nobody wants java in the build system. Get rid of it BGO 672778
-	myconf_gn+=" closure_compile=false"
 
 	# Use system-provided libraries.
 	# TODO: freetype -- remove sources (https://bugs.chromium.org/p/pdfium/issues/detail?id=733).
@@ -498,9 +502,12 @@ src_configure() {
 	myconf_gn+=" use_system_harfbuzz=true"
 
 	# Optional dependencies.
+	myconf_gn+=" closure_compile=$(usex closure-compile true false)"
 	myconf_gn+=" enable_hangout_services_extension=$(usex hangouts true false)"
 	myconf_gn+=" enable_widevine=$(usex widevine true false)"
+	myconf_gn+=" use_atk=$(usex atk true false)"
 	myconf_gn+=" use_cups=$(usex cups true false)"
+	myconf_gn+=" use_dbus=$(usex dbus true false)"
 	myconf_gn+=" use_gnome_keyring=$(usex gnome-keyring true false)"
 	myconf_gn+=" use_kerberos=$(usex kerberos true false)"
 	myconf_gn+=" use_pulseaudio=$(usex pulseaudio true false)"
@@ -578,13 +585,13 @@ src_configure() {
 	# Disable fatal linker warnings, bug 506268.
 	myconf_gn+=" fatal_linker_warnings=false"
 
-	# https://bugs.gentoo.org/588596
-	#append-cxxflags $(test-flags-CXX -fno-delete-null-pointer-checks)
-
 	# musl does not support malloc interposition
 	if use elibc_musl; then
-		myconf_gn+=" use_allocator_shim=false"
+        myconf_gn+=" use_allocator_shim=false"
 	fi
+
+	# https://bugs.gentoo.org/588596
+	#append-cxxflags $(test-flags-CXX -fno-delete-null-pointer-checks)
 
 	# Bug 491582.
 	export TMPDIR="${WORKDIR}/temp"
