@@ -28,7 +28,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 COMMON_DEPEND="${PYTHON_DEPS}
 	~media-libs/avidemux-core-${PV}:${SLOT}[vdpau?]
 	~media-video/avidemux-${PV}:${SLOT}[opengl?,qt5?]
-	>=dev-lang/spidermonkey-1.5-r2:0=
+	>=dev-lang/spidermonkey-1.5-r2
 	dev-libs/libxml2:2
 	media-libs/a52dec:0
 	media-libs/libass:0=
