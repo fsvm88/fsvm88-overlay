@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-
 GNOME2_EAUTORECONF="yes"
+
 inherit gnome2 systemd
 
 DESCRIPTION="D-Bus interfaces for querying and manipulating user account information"
@@ -12,10 +12,9 @@ SRC_URI="https://www.freedesktop.org/software/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 ~ia64 ~ppc ~sparc ~x86"
+KEYWORDS="~alpha amd64 arm ~arm64 ~ia64 ppc ppc64 ~sparc x86"
 
 IUSE="doc elogind +introspection selinux systemd"
-
 REQUIRED_USE="?? ( elogind systemd )"
 
 CDEPEND="
@@ -42,7 +41,9 @@ RDEPEND="${CDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-0.6.35-gentoo-system-users.patch"
+	"${FILESDIR}"/${PN}-0.6.35-gentoo-system-users.patch
+
+	# lib: don't set loaded state until seat is fetched (from 'master')
 	"${FILESDIR}/musl-fgetspent_r.patch"
 	"${FILESDIR}"/${P}-loaded-state.patch
 )
