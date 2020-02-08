@@ -152,9 +152,9 @@ diff -Naur qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/build/bu
  // we really are using glibc, not uClibc pretending to be glibc
  #define LIBC_GLIBC 1
  #endif
-diff -Naur qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/assertions.cpp qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/assertions.cpp
---- qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/assertions.cpp	2018-11-19 18:55:45.000000000 +0000
-+++ qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/assertions.cpp	2019-01-03 16:53:50.292728521 +0000
+diff -Naur qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/Assertions.cpp qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/Assertions.cpp
+--- qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/Assertions.cpp	2018-11-19 18:55:45.000000000 +0000
++++ qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/Assertions.cpp	2019-01-03 16:53:50.292728521 +0000
 @@ -49,7 +49,7 @@
  #include <windows.h>
  #endif
@@ -200,6 +200,18 @@ diff -Naur qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_pa
     static locale_t loc = NULL;
     if (!loc) {
        loc = newlocale(LC_CTYPE_MASK, "C", NULL);
+diff -Naur qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/pdfium/third_party/build/build_config.h qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/pdfium/third_party/build/build_config.h
+--- qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/pdfium/third_party/build/build_config.h	2018-11-19 18:55:45.000000000 +0000
++++ qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/pdfium/third_party/build/build_config.h	2019-01-03 16:51:13.710694002 +0000
+@@ -43,7 +43,7 @@
+ #define OS_LINUX 1
+ // include a system header to pull in features.h for glibc/uclibc macros.
+ #include <unistd.h>
+-#if defined(__GLIBC__) && !defined(__UCLIBC__)
++#if defined(__GLIBC__)
+ // we really are using glibc, not uClibc pretending to be glibc
+ #define LIBC_GLIBC 1
+ #endif
 diff -Naur qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/skia/src/ports/SkOSFile_stdio.cpp qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/skia/src/ports/SkOSFile_stdio.cpp
 --- qtwebengine-everywhere-src-5.11.3.orig/src/3rdparty/chromium/third_party/skia/src/ports/SkOSFile_stdio.cpp	2018-11-19 18:55:45.000000000 +0000
 +++ qtwebengine-everywhere-src-5.11.3/src/3rdparty/chromium/third_party/skia/src/ports/SkOSFile_stdio.cpp	2019-01-03 16:50:46.693652796 +0000

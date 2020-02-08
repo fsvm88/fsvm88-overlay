@@ -7,7 +7,7 @@ inherit multilib
 
 DESCRIPTION="A library for inspecting program's backtrace"
 HOMEPAGE="http://www.freebsdsoftware.org/devel/libexecinfo.html"
-SRC_URI="mirror://freebsd/distfiles/${P}.tar.bz2"
+SRC_URI="http://distcache.freebsd.org/local-distfiles/itetcu/${P}.tar.bz2"
 
 LICENSE="BSD-2"
 SLOT="0"

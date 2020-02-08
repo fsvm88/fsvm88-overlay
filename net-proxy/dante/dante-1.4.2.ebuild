@@ -15,7 +15,7 @@ IUSE="debug kerberos pam selinux static-libs tcpd upnp"
 
 CDEPEND="
 	kerberos? ( virtual/krb5 )
-	pam? ( virtual/pam )
+	pam? ( sys-libs/pam )
 	tcpd? ( sys-apps/tcp-wrappers )
 	upnp? ( net-libs/miniupnpc:= )
 	userland_GNU? ( virtual/shadow )
@@ -33,8 +33,10 @@ DOCS="BUGS CREDITS NEWS README SUPPORT doc/README* doc/*.txt doc/SOCKS4.protocol
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.4.0-socksify.patch
 	"${FILESDIR}"/${PN}-1.4.0-osdep-format-macro.patch
+#	"${FILESDIR}"/${PN}-1.4.0-cflags.patch
 	"${FILESDIR}"/${PN}-1.4.0-HAVE_SENDBUF_IOCTL.patch
 	"${FILESDIR}"/${PN}-1.4.1-sigpwr-siginfo.patch #517528
+#	"${FILESDIR}"/${PN}-1.4.1-miniupnp14.patch #564680
 )
 
 src_prepare() {
