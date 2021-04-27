@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7,8,9} )
+DISTUTILS_USE_SETUPTOOLS=rdepend
 
 inherit distutils-r1
 
@@ -20,27 +21,32 @@ fi
 LICENSE="GPL-3"
 SLOT="0"
 IUSE="test"
+S="${WORKDIR}/OCRmyPDF-${PV}"
 
-DEPEND="
+RDEPEND="
+		<dev-python/pikepdf-3[${PYTHON_USEDEP}]
+		<dev-python/pluggy-1.0[${PYTHON_USEDEP}]
+		=media-gfx/img2pdf-0.3*
 		>=app-text/ghostscript-gpl-9.15
 		>=app-text/qpdf-8.0.2
 		>=app-text/tesseract-4.0.0
 		>=app-text/unpaper-6.1
-		=dev-python/chardet-3*[${PYTHON_USEDEP}]
 		>=dev-python/cffi-1.9.1[${PYTHON_USEDEP}]
-		>=dev-python/pdfminer-six-20181108[${PYTHON_USEDEP}]
-		<=dev-python/pdfminer-six-20200402[${PYTHON_USEDEP}]
-		=dev-python/pikepdf-1*[${PYTHON_USEDEP}]
-		>=dev-python/pillow-6.2.0[${PYTHON_USEDEP}]
+		>=dev-python/coloredlogs-14.0[${PYTHON_USEDEP}]
+		>=dev-python/pikepdf-2[${PYTHON_USEDEP}]
+		>=dev-python/pillow-7.0.0[${PYTHON_USEDEP}]
+		>=dev-python/pluggy-0.13[${PYTHON_USEDEP}]
 		>=dev-python/reportlab-3.3[${PYTHON_USEDEP}]
 		>=dev-python/tqdm-4[${PYTHON_USEDEP}]
-		=media-gfx/img2pdf-0.3*
 		>=media-gfx/pngquant-2.0.0
-		media-libs/leptonica
+		>=media-libs/leptonica-1.74.4
+		>dev-python/pdfminer-six-20200720[${PYTHON_USEDEP}]
+		dev-libs/libxml2
+		media-libs/icc-profiles-openicc
+		sys-libs/zlib
 		test? ( dev-python/pytest-runner )
 		"
-RDEPEND="${DEPEND}"
-BDEPEND=">=dev-python/cffi-1.9.1[${PYTHON_USEDEP}]"
+DEPEND="${RDEPEND}"
 
 python_prepare_all() {
 	sed -i -e "/'pytest-runner'/d" setup.py || die

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python3_{4,5,6,7} pypy )
+PYTHON_COMPAT=( python3_{7,8,9} pypy )
 
 inherit distutils-r1
 
@@ -16,10 +16,9 @@ KEYWORDS="amd64 x86"
 IUSE="doc examples"
 
 DEPEND="
-		dev-python/six[${PYTHON_USEDEP}]
-		dev-python/pycryptodome[${PYTHON_USEDEP}]
-		dev-python/sortedcontainers[${PYTHON_USEDEP}]
 		dev-python/chardet[${PYTHON_USEDEP}]
+		dev-python/cryptography[${PYTHON_USEDEP}]
+		dev-python/sortedcontainers[${PYTHON_USEDEP}]
 "
 
 S="${WORKDIR}/${P/-six/.six}"
