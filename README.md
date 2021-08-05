@@ -1,2 +1,2 @@
-# gentoo-local-overlay
-Local overlay of patched development ebuilds
+# fsvm88-overlay
+Overlay of patched development ebuilds, some more recent stuff, and some specific fixes
