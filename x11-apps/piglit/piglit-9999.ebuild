@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils eutils git-r3
 
@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://cgit.freedesktop.org/piglit
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 IUSE="opencl test minimal"
 
 RDEPEND="

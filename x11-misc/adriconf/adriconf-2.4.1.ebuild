@@ -6,7 +6,7 @@ EAPI=7
 inherit cmake desktop
 
 DESCRIPTION="Advanced DRI Configurator"
-HOMEPAGE="https://github.com/jlHertel/adriconf"
+HOMEPAGE="https://gitlab.freedesktop.org/mesa/adriconf"
 if [[ "${PV}" == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/mesa/adriconf.git"

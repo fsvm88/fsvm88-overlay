@@ -1,8 +1,9 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-inherit autotools ltprune systemd user
+EAPI=7
+
+inherit autotools systemd
 
 DESCRIPTION="A free socks4,5 and msproxy implementation"
 HOMEPAGE="https://www.inet.no/dante/"
@@ -10,21 +11,26 @@ SRC_URI="https://www.inet.no/dante/files/${P}.tar.gz"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm arm64 hppa ia64 ~m68k ~mips ppc ppc64 s390 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
 IUSE="debug kerberos pam selinux static-libs tcpd upnp"
 
 CDEPEND="
+	virtual/libcrypt:=
 	kerberos? ( virtual/krb5 )
 	pam? ( sys-libs/pam )
 	tcpd? ( sys-apps/tcp-wrappers )
 	upnp? ( net-libs/miniupnpc:= )
 	userland_GNU? ( sys-apps/shadow )
 "
-DEPEND="${CDEPEND}
+DEPEND="
+	${CDEPEND}
 	sys-devel/bison
 	sys-devel/flex
 "
-RDEPEND="${CDEPEND}
+RDEPEND="
+	${CDEPEND}
+	acct-group/sockd
+	acct-user/sockd
 	selinux? ( sec-policy/selinux-dante )
 "
 
@@ -33,22 +39,22 @@ DOCS="BUGS CREDITS NEWS README SUPPORT doc/README* doc/*.txt doc/SOCKS4.protocol
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.4.0-socksify.patch
 	"${FILESDIR}"/${PN}-1.4.0-osdep-format-macro.patch
-#	"${FILESDIR}"/${PN}-1.4.0-cflags.patch
+#	"${FILESDIR}"/${PN}-1.4.0-cflags.patch #
 	"${FILESDIR}"/${PN}-1.4.0-HAVE_SENDBUF_IOCTL.patch
 	"${FILESDIR}"/${PN}-1.4.1-sigpwr-siginfo.patch #517528
-#	"${FILESDIR}"/${PN}-1.4.1-miniupnp14.patch #564680
+#	"${FILESDIR}"/${PN}-1.4.1-miniupnp14.patch #564680 #
 )
 
 src_prepare() {
 	default
 
-	sed -i \
+	sed \
 		-e 's:/etc/socks\.conf:"${EPREFIX}"/etc/socks/socks.conf:' \
 		-e 's:/etc/sockd\.conf:"${EPREFIX}"/etc/socks/sockd.conf:' \
-		doc/{socksify.1,socks.conf.5,sockd.conf.5,sockd.8} \
+		-i doc/{socksify.1,socks.conf.5,sockd.conf.5,sockd.8} \
 		|| die
 
-	sed -i -e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' configure.ac || die
+	sed -e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' -i configure.ac || die
 
 	eautoreconf
 }
@@ -57,7 +63,6 @@ src_configure() {
 	# hardcoded the libc name otherwise the scan on a amd64 multilib system
 	# ends up finding /usr/lib32/libc.so.5. That cascades and causes the
 	# preload/libdsocks to not be built.
-	export lt_cv_archive_cmds_need_lc=yes
 	econf \
 		--with-socks-conf="${EPREFIX}"/etc/socks/socks.conf \
 		--with-sockd-conf="${EPREFIX}"/etc/socks/sockd.conf \
@@ -95,9 +100,5 @@ src_install() {
 	docinto examples
 	dodoc example/*.conf
 
-	prune_libtool_files
-}
-
-pkg_postinst() {
-	enewuser sockd -1 -1 /etc/socks daemon
+	find "${ED}" -name '*.la' -delete || die
 }
