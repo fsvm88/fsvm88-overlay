@@ -26,7 +26,7 @@ S="${WORKDIR}/OCRmyPDF-${PV}"
 RDEPEND="
 		<dev-python/pikepdf-3[${PYTHON_USEDEP}]
 		<dev-python/pluggy-1.0[${PYTHON_USEDEP}]
-		=media-gfx/img2pdf-0.3*
+		=media-gfx/img2pdf-0.4*
 		>=app-text/ghostscript-gpl-9.15
 		>=app-text/qpdf-8.0.2
 		>=app-text/tesseract-4.0.0
@@ -34,10 +34,10 @@ RDEPEND="
 		>=dev-python/cffi-1.9.1[${PYTHON_USEDEP}]
 		>=dev-python/coloredlogs-14.0[${PYTHON_USEDEP}]
 		>=dev-python/pikepdf-2[${PYTHON_USEDEP}]
-		>=dev-python/pillow-7.0.0[${PYTHON_USEDEP}]
+		>=dev-python/pillow-8.2.0[${PYTHON_USEDEP}]
 		>=dev-python/pluggy-0.13[${PYTHON_USEDEP}]
-		>=dev-python/reportlab-3.3[${PYTHON_USEDEP}]
-		>=dev-python/tqdm-4[${PYTHON_USEDEP}]
+		>=dev-python/reportlab-3.5[${PYTHON_USEDEP}]
+		>=dev-python/tqdm-4.59[${PYTHON_USEDEP}]
 		>=media-gfx/pngquant-2.0.0
 		>=media-libs/leptonica-1.74.4
 		>dev-python/pdfminer-six-20200720[${PYTHON_USEDEP}]
