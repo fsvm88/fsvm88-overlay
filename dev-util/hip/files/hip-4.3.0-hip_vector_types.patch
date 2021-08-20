@@ -1,0 +1,11 @@
+diff -Nuar HIP-rocm-4.3.0.orig/include/hip/hcc_detail/hip_vector_types.h HIP-rocm-4.3.0/include/hip/hcc_detail/hip_vector_types.h
+--- HIP-rocm-4.3.0.orig/include/hip/hcc_detail/hip_vector_types.h	2021-07-25 18:31:24.000000000 +0200
++++ HIP-rocm-4.3.0/include/hip/hcc_detail/hip_vector_types.h	2021-08-20 14:16:17.741854195 +0200
+@@ -45,6 +45,7 @@
+ 
+ #if defined(__cplusplus)
+ #if !defined(__HIPCC_RTC__)
++    #include <new>
+     #include <array>
+     #include <iosfwd>
+     #include <type_traits>
