@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{7,8,9,10} )
 DISTUTILS_USE_SETUPTOOLS=rdepend
 
 inherit distutils-r1
@@ -24,24 +24,25 @@ IUSE="test"
 S="${WORKDIR}/OCRmyPDF-${PV}"
 
 RDEPEND="
-		<dev-python/pikepdf-3[${PYTHON_USEDEP}]
-		<dev-python/pluggy-1.0[${PYTHON_USEDEP}]
-		=media-gfx/img2pdf-0.4*
-		>=app-text/ghostscript-gpl-9.15
-		>=app-text/qpdf-8.0.2
-		>=app-text/tesseract-4.0.0
-		>=app-text/unpaper-6.1
-		>=dev-python/cffi-1.9.1[${PYTHON_USEDEP}]
+		<dev-python/pdfminer-six-20211012[${PYTHON_USEDEP}]
+		<dev-python/pluggy-2[${PYTHON_USEDEP}]
+		<media-gfx/img2pdf-0.5
+		>=app-text/ghostscript-gpl-9.55.0-r1
+		>=app-text/qpdf-10.3.2
+		>=app-text/tesseract-4.1.1
+		>=app-text/unpaper-6.1-r1
 		>=dev-python/coloredlogs-14.0[${PYTHON_USEDEP}]
-		>=dev-python/pikepdf-2[${PYTHON_USEDEP}]
+		>=dev-python/importlib_metadata-4[${PYTHON_USEDEP}]
+		>=dev-python/importlib_resources-5[${PYTHON_USEDEP}]
+		>=dev-python/pikepdf-4[${PYTHON_USEDEP}]
 		>=dev-python/pillow-8.2.0[${PYTHON_USEDEP}]
 		>=dev-python/pluggy-0.13[${PYTHON_USEDEP}]
-		>=dev-python/reportlab-3.5[${PYTHON_USEDEP}]
+		>=dev-python/reportlab-3.5.66[${PYTHON_USEDEP}]
 		>=dev-python/tqdm-4.59[${PYTHON_USEDEP}]
-		>=media-gfx/pngquant-2.0.0
-		>=media-libs/leptonica-1.74.4
+		>=media-gfx/img2pdf-0.3
+		>=media-gfx/pngquant-2.12.6
+		>=media-libs/jbig2dec-0.19
 		>dev-python/pdfminer-six-20200720[${PYTHON_USEDEP}]
-		dev-libs/libxml2
 		media-libs/icc-profiles-openicc
 		sys-libs/zlib
 		test? ( dev-python/pytest-runner )

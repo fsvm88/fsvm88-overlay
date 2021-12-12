@@ -32,7 +32,12 @@ RDEPEND="
 	x11-libs/gtk+:3
 	x11-libs/libdrm
 	x11-libs/libX11
-	wayland? ( media-libs/mesa[egl] )
+	wayland? (
+		|| (
+			<media-libs/mesa-9999[egl]
+			>=media-libs/mesa-9999
+		)
+	)
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
