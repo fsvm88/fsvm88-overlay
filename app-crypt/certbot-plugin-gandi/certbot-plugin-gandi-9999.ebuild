@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=(python{3_9,3_10,3_11})
+PYTHON_COMPAT=(python{3_10,3_11})
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://github.com/obynio/certbot-plugin-gandi"
