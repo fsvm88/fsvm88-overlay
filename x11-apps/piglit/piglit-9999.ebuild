@@ -4,7 +4,7 @@
 
 EAPI=7
 
-inherit cmake-utils eutils git-r3
+inherit cmake eutils git-r3
 
 DESCRIPTION="OpenGL and OpenCL test suite."
 HOMEPAGE="http://piglit.freedesktop.org/"
@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}"
 
 HDEPEND="dev-util/cmake"
 
-BUILD_DIR="${WORKDIR}/${P}"
+#BUILD_DIR="${WORKDIR}/${P}"
 
 src_configure() {
 	local mycmakeargs=(
@@ -50,5 +50,5 @@ src_configure() {
 		-DPIGLIT_BUILD_GL_TESTS=ON
 		-DPIGLIT_USE_WAFFLE=ON
 	)
-	CMAKE_USE_DIR="${S}" cmake-utils_src_configure
+	cmake_src_configure
 }
