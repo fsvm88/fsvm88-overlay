@@ -22,6 +22,11 @@ DEPEND="
 
 S="${WORKDIR}/${P/-six/.six}"
 
+python_prepare_all() {
+	sed -i -e "s:__VERSION__:$PV:" "${S}/pdfminer/__init__.py"
+	distutils-r1_python_prepare_all
+}
+
 python_compile_all(){
 	use examples && emake -C samples all
 }
