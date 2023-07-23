@@ -11,16 +11,16 @@ SRC_URI="https://www.inet.no/dante/files/${P}.tar.gz"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
 IUSE="debug kerberos pam selinux static-libs tcpd upnp"
 
 CDEPEND="
+	sys-apps/shadow
 	virtual/libcrypt:=
 	kerberos? ( virtual/krb5 )
 	pam? ( sys-libs/pam )
 	tcpd? ( sys-apps/tcp-wrappers )
 	upnp? ( net-libs/miniupnpc:= )
-	userland_GNU? ( sys-apps/shadow )
 "
 DEPEND="
 	${CDEPEND}
@@ -47,6 +47,9 @@ PATCHES=(
 
 src_prepare() {
 	default
+
+	# 780039
+	sed -e 's/-all-dynamic//' -i dlib/Makefile.am dlib64/Makefile.am || die
 
 	sed \
 		-e 's:/etc/socks\.conf:"${EPREFIX}"/etc/socks/socks.conf:' \
