@@ -14,8 +14,6 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
-RESTRICT="mirror strip bindist"
-
 LICENSE="
 	Apache-2.0
 	BSD
@@ -38,6 +36,7 @@ LICENSE="
 SLOT="0"
 KEYWORDS="-* amd64 ~arm ~arm64"
 IUSE="kerberos"
+RESTRICT="mirror strip bindist"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -51,6 +50,7 @@ RDEPEND="
 	media-libs/libglvnd
 	media-libs/mesa
 	net-misc/curl
+	sys-apps/dbus
 	sys-libs/zlib
 	sys-process/lsof
 	x11-libs/cairo
