@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=7
+EAPI=8
 
-inherit cmake eutils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="OpenGL and OpenCL test suite."
 HOMEPAGE="http://piglit.freedesktop.org/"
