@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
@@ -33,7 +33,7 @@ RDEPEND="
 		>=dev-python/deprecation-2.1.0-r1[${PYTHON_USEDEP}]
 		>=dev-python/packaging-23.1[${PYTHON_USEDEP}]
 		>=dev-python/pdfminer-six-20220319[${PYTHON_USEDEP}]
-		>=dev-python/pikepdf-8.4.1[${PYTHON_USEDEP}]
+		>=dev-python/pikepdf-8.7.1[${PYTHON_USEDEP}]
 		>=dev-python/pillow-10.0.1[${PYTHON_USEDEP}]
 		>=dev-python/pluggy-1.3.0[${PYTHON_USEDEP}]
 		>=dev-python/reportlab-4.0.4[${PYTHON_USEDEP}]
