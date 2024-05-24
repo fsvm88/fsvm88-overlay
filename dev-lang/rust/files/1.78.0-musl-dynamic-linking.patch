@@ -4,16 +4,10 @@ Date: Tue, 2 Aug 2022 18:32:53 -0500
 Subject: [PATCH] Enable dynamic linking by default for musl
 
 Signed-off-by: Jory Pratt <anarchy@gentoo.org>
----
- compiler/rustc_target/src/spec/linux_musl_base.rs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/compiler/rustc_target/src/spec/linux_musl_base.rs b/compiler/rustc_target/src/spec/linux_musl_base.rs
-index 207a87ab0..8a5a43363 100644
---- a/compiler/rustc_target/src/spec/linux_musl_base.rs
-+++ b/compiler/rustc_target/src/spec/linux_musl_base.rs
+--- a/compiler/rustc_target/src/spec/base/linux_musl.rs
++++ b/compiler/rustc_target/src/spec/base/linux_musl.rs
 @@ -10,7 +10,7 @@ pub fn opts() -> TargetOptions {
-     base.crt_objects_fallback = Some(CrtObjectsFallback::Musl);
+     base.link_self_contained = LinkSelfContainedDefault::InferredForMusl;
  
      // These targets statically link libc by default
 -    base.crt_static_default = true;
