@@ -58,7 +58,11 @@ BDEPEND="
 	)
 "
 RDEPEND="${DEPEND}
+	dev-util/clinfo
 	sys-devel/clang-runtime:=
+	opencl? (
+		dev-libs/rocm-opencl-runtime
+	)
 	video_cards_amdgpu? (
 		dev-util/hipcc:${SLOT}[${LLVM_USEDEP}]
 		>=dev-libs/rocm-device-libs-${PV}
@@ -253,4 +257,14 @@ src_install() {
 	rm "${ED}/usr/lib64/libOpenCL.so.1.2" || die
 	rm "${ED}/usr/lib64/libOpenCL.so" || die
 	rm "${ED}/usr/lib64/libOpenCL.so.1" || die
+
+	# files already installed by clinfo
+	rm "${ED}/usr/bin/clinfo"
+	rm "${ED}/usr/lib/debug/usr/bin/clinfo.debug"
+
+	# files already installed by rocm-opencl-runtime
+	rm "${ED}/usr/lib/debug/usr/lib64/libamdocl64.so.debug"
+	rm "${ED}/usr/lib/debug/usr/lib64/libcltrace.so.debug"
+	rm "${ED}/usr/lib64/libamdocl64.so"
+	rm "${ED}/usr/lib64/libcltrace.so"
 }
