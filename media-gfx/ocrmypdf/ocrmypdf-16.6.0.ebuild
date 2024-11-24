@@ -25,6 +25,7 @@ S="${WORKDIR}/OCRmyPDF-${PV}"
 
 RDEPEND="
 		>=app-text/ghostscript-gpl-10.02.0
+		>=app-text/pdfminer-20220319[${PYTHON_USEDEP}]
 		>=app-text/qpdf-11.5.0
 		>=app-text/tesseract-5.3.0
 		>=app-text/unpaper-7
@@ -32,7 +33,6 @@ RDEPEND="
 		>=dev-python/cython-3.0.2-r1[${PYTHON_USEDEP}]
 		>=dev-python/deprecation-2.1.0-r1[${PYTHON_USEDEP}]
 		>=dev-python/packaging-23.1[${PYTHON_USEDEP}]
-		>=dev-python/pdfminer-six-20220319[${PYTHON_USEDEP}]
 		>=dev-python/pikepdf-8.10.1[${PYTHON_USEDEP}]
 		>=dev-python/pillow-10.0.1[${PYTHON_USEDEP}]
 		>=dev-python/pluggy-1.3.0[${PYTHON_USEDEP}]
