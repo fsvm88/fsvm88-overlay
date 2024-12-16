@@ -1,0 +1,12 @@
+diff '--color=auto' -Nuar clr-rocm-6.3.0.orig/hipamd/include/hip/amd_detail/amd_math_functions.h clr-rocm-6.3.0/hipamd/include/hip/amd_detail/amd_math_functions.h
+--- clr-rocm-6.3.0.orig/hipamd/include/hip/amd_detail/amd_math_functions.h	2024-11-18 18:25:24.000000000 +0100
++++ clr-rocm-6.3.0/hipamd/include/hip/amd_detail/amd_math_functions.h	2024-12-10 23:24:54.735244379 +0100
+@@ -42,7 +42,7 @@
+ #endif // !defined(__HIPCC_RTC__)
+ 
+ #if _LIBCPP_VERSION && __HIP__
+-namespace std {
++namespace __hip {
+ template <>
+ struct __numeric_type<_Float16>
+ {

@@ -1,0 +1,13 @@
+diff '--color=auto' -Nuar rocprofiler-rocm-6.2.4.orig/cmake_modules/rocprofiler_env.cmake rocprofiler-rocm-6.2.4/cmake_modules/rocprofiler_env.cmake
+--- rocprofiler-rocm-6.2.4.orig/cmake_modules/rocprofiler_env.cmake	2024-10-07 22:05:50.000000000 +0200
++++ rocprofiler-rocm-6.2.4/cmake_modules/rocprofiler_env.cmake	2024-12-01 23:27:23.612513565 +0100
+@@ -80,9 +80,3 @@
+     message(FATAL_ERROR "ROCM_ROOT_DIR is not found.")
+ endif()
+ 
+-find_library(
+-    HSA_AMD_AQLPROFILE_LIBRARY
+-    NAMES hsa-amd-aqlprofile64
+-    HINTS ${CMAKE_PREFIX_PATH}
+-    PATHS ${ROCM_ROOT_DIR}
+-    PATH_SUFFIXES lib REQUIRED)

@@ -1,0 +1,11 @@
+diff '--color=auto' -Nuar rocprofiler-register-rocm-6.3.0.orig/tests/rocprofiler/rocprofiler.cpp rocprofiler-register-rocm-6.3.0/tests/rocprofiler/rocprofiler.cpp
+--- rocprofiler-register-rocm-6.3.0.orig/tests/rocprofiler/rocprofiler.cpp	2024-12-08 18:14:47.382929318 +0100
++++ rocprofiler-register-rocm-6.3.0/tests/rocprofiler/rocprofiler.cpp	2024-12-08 18:14:17.542886613 +0100
+@@ -8,6 +8,7 @@
+ #include <pthread.h>
+ #include <stdexcept>
+ #include <string_view>
++#include <string>
+ 
+ #ifndef ROCP_REG_FILE_NAME
+ #    define ROCP_REG_FILE_NAME                                                           \

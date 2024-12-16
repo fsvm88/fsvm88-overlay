@@ -1,0 +1,13 @@
+diff '--color=auto' -Nuar rocprofiler-register-rocm-6.3.0.orig/CMakeLists.txt rocprofiler-register-rocm-6.3.0/CMakeLists.txt
+--- rocprofiler-register-rocm-6.3.0.orig/CMakeLists.txt	2024-12-08 18:30:54.574171069 +0100
++++ rocprofiler-register-rocm-6.3.0/CMakeLists.txt	2024-12-08 18:31:46.210900019 +0100
+@@ -77,9 +77,6 @@
+ 
+ include(GNUInstallDirs) # install directories
+ 
+-# ROCm does not use lib64
+-set(CMAKE_INSTALL_LIBDIR "lib")
+-
+ include(rocprofiler_register_utilities) # various functions/macros
+ include(rocprofiler_register_interfaces) # interface libraries
+ include(rocprofiler_register_compilers) # compiler identification
