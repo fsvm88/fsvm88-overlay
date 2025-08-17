@@ -1,0 +1,57 @@
+diff '--color=auto' -Nuar a/bolt/lib/Target/AArch64/CMakeLists.txt b/bolt/lib/Target/AArch64/CMakeLists.txt
+--- a/bolt/lib/Target/AArch64/CMakeLists.txt	2025-08-17 23:19:34.944618300 +0100
++++ b/bolt/lib/Target/AArch64/CMakeLists.txt	2025-08-17 23:19:14.029600631 +0100
+@@ -1,6 +1,5 @@
+ set(LLVM_LINK_COMPONENTS
+   Support
+-  AArch64Desc
+   )
+ 
+ if(BOLT_BUILT_STANDALONE)
+@@ -25,7 +24,7 @@
+   AArch64CommonTableGen
+   )
+ 
+-target_link_libraries(LLVMBOLTTargetAArch64 PRIVATE LLVMBOLTCore)
++target_link_libraries(LLVMBOLTTargetAArch64 PRIVATE LLVMBOLTCore LLVM)
+ 
+ include_directories(
+   ${LLVM_MAIN_SRC_DIR}/lib/Target/AArch64
+diff '--color=auto' -Nuar a/bolt/lib/Target/RISCV/CMakeLists.txt b/bolt/lib/Target/RISCV/CMakeLists.txt
+--- a/bolt/lib/Target/RISCV/CMakeLists.txt	2025-08-17 23:20:01.241857131 +0100
++++ b/bolt/lib/Target/RISCV/CMakeLists.txt	2025-08-17 23:17:43.813319164 +0100
+@@ -1,6 +1,5 @@
+ set(LLVM_LINK_COMPONENTS
+   Support
+-  RISCVDesc
+   )
+ 
+ if(BOLT_BUILT_STANDALONE)
+@@ -26,7 +25,7 @@
+   RISCVCommonTableGen
+   )
+ 
+-target_link_libraries(LLVMBOLTTargetRISCV PRIVATE LLVMBOLTCore)
++target_link_libraries(LLVMBOLTTargetRISCV PRIVATE LLVMBOLTCore LLVM)
+ 
+ include_directories(
+   ${LLVM_MAIN_SRC_DIR}/lib/Target/RISCV
+diff '--color=auto' -Nuar a/bolt/lib/Target/X86/CMakeLists.txt b/bolt/lib/Target/X86/CMakeLists.txt
+--- a/bolt/lib/Target/X86/CMakeLists.txt	2025-08-17 23:19:47.221866493 +0100
++++ b/bolt/lib/Target/X86/CMakeLists.txt	2025-08-17 23:17:50.045364958 +0100
+@@ -1,6 +1,5 @@
+ set(LLVM_LINK_COMPONENTS
+   Support
+-  X86Desc
+   )
+ 
+ if(BOLT_BUILT_STANDALONE)
+@@ -26,7 +25,7 @@
+   X86CommonTableGen
+   )
+ 
+-target_link_libraries(LLVMBOLTTargetX86 PRIVATE LLVMBOLTCore LLVMBOLTUtils)
++target_link_libraries(LLVMBOLTTargetX86 PRIVATE LLVMBOLTCore LLVMBOLTUtils LLVM)
+ 
+ include_directories(
+   ${LLVM_MAIN_SRC_DIR}/lib/Target/X86

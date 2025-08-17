@@ -1,0 +1,9 @@
+diff '--color=auto' -Nuar a/bolt/tools/bat-dump/CMakeLists.txt b/bolt/tools/bat-dump/CMakeLists.txt
+--- a/bolt/tools/bat-dump/CMakeLists.txt	2025-08-17 19:13:35.805312863 +0100
++++ b/bolt/tools/bat-dump/CMakeLists.txt	2025-08-17 19:14:53.919514511 +0100
+@@ -11,4 +11,5 @@
+ target_link_libraries(llvm-bat-dump
+   PRIVATE
+   LLVMBOLTProfile
++  LLVM
+   )
