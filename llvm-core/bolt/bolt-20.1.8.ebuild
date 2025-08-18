@@ -30,14 +30,15 @@ BDEPEND="
 	)
 "
 
-LLVM_COMPONENTS=( bolt llvm cmake )
+LLVM_COMPONENTS=( llvm bolt cmake )
+#LLVM_COMPONENTS=( llvm bolt cmake llvm/lib/Target/AArch64 llvm/lib/Target/RISCV llvm/lib/Target/X86 )
 LLVM_USE_TARGETS=llvm+eq
 
-PATCHES=(
-	"${FILESDIR}"/no-shared-libs.patch
-	"${FILESDIR}"/${PN}-tools-bat-dump-link-mainlib.patch
-	"${FILESDIR}"/${PN}-targets-no-linkage-link-mainlib.patch
-)
+#PATCHES=(
+#	"${FILESDIR}"/no-shared-libs.patch
+#	"${FILESDIR}"/${PN}-tools-bat-dump-link-mainlib.patch
+#	"${FILESDIR}"/${PN}-targets-no-linkage-link-mainlib.patch
+#)
 
 llvm.org_set_globals
 
@@ -67,17 +68,19 @@ src_configure() {
 	use elibc_musl && append-ldflags -Wl,-z,stack-size=2097152
 
 	local mycmakeargs=(
+		-DLLVM_ENABLE_PROJECTS="bolt"
+		-DLLVM_INCLUDE_BENCHMARKS=OFF
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr/lib/llvm/${LLVM_MAJOR}"
 		-DLLVM_ROOT="${ESYSROOT}/usr/lib/llvm/${LLVM_MAJOR}"
 		-DLLVM_DIR="${ESYSROOT}/usr/lib/llvm/${LLVM_ROOT}/lib64/cmake/llvm"
-		-DBOLT_BUILT_STANDALONE=TRUE
+		-DBOLT_ENABLE_RUNTIME=ON
 		-DBUILD_SHARED_LIBS=OFF
 		-DCMAKE_SKIP_RPATH=ON
 		-DLLVM_INCLUDE_TESTS=$(usex test)
-		-DLLVM_LINK_LLVM_DYLIB=OFF
+		-DLLVM_LINK_LLVM_DYLIB=ON
+		-DLLVM_TARGETS_TO_BUILD="AArch64;RISCV;X86"
 	)
 	# Bolt only supports 3 targets, easier to build them all than to filter LLVM_TARGETS
-#		-DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS// /;}"
 
 	use test && mycmakeargs+=(
 		-DLLVM_EXTERNAL_LIT="${EPREFIX}/usr/bin/lit"
@@ -92,3 +95,12 @@ src_configure() {
 	cmake_src_configure
 }
 
+src_compile() {
+	cmake_build bolt llvm-bat-dump
+}
+
+src_install() {
+	DESTDIR="${D}" cmake_build install-bolt
+	into "${EPREFIX}/usr/lib/llvm/${LLVM_MAJOR}"
+	dobin "${WORKDIR}/llvm_build/bin/llvm-bat-dump"
+}
