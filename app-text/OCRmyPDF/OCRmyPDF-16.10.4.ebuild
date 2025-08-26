@@ -41,8 +41,6 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-16.10.2-suppress-runtime-error.patch
-	"${FILESDIR}"/${PN}-16.10.2-xfail-tests.patch
 )
 
 EPYTEST_PLUGINS=( hypothesis )
