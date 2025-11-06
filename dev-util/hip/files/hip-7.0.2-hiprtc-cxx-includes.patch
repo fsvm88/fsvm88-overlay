@@ -1,0 +1,47 @@
+--- a/hipamd/src/hiprtc/CMakeLists.txt.orig	2025-11-04 15:43:42.145581177 +0000
++++ b/hipamd/src/hiprtc/CMakeLists.txt	2025-11-04 15:44:22.391846747 +0000
+@@ -181,6 +181,35 @@
+ ${PROJECT_SOURCE_DIR}/include/hip/amd_detail/amd_math_functions.h
+ )
+ 
++# Find system C++ standard library paths for cuda_wrappers
++# These are needed because -isystem flags override normal search paths
++set(SYSTEM_CXX_INCLUDES "")
++# Add libc++ if available
++if(EXISTS "/usr/include/c++/v1")
++  list(APPEND SYSTEM_CXX_INCLUDES "-cxx-isystem" "/usr/include/c++/v1")
++endif()
++# Add libstdc++ if available (needed for bits/c++config.h in cuda_wrappers)
++file(GLOB LIBSTDCXX_PATHS "/usr/lib/gcc/*/*/include/g++-v*")
++if(LIBSTDCXX_PATHS)
++  list(GET LIBSTDCXX_PATHS 0 LIBSTDCXX_PATH)
++  list(APPEND SYSTEM_CXX_INCLUDES "-cxx-isystem" "${LIBSTDCXX_PATH}")
++  # Find the architecture-specific include directory (contains bits/c++config.h)
++  # Look for architecture triplet directories (e.g., x86_64-pc-linux-gnu)
++  file(GLOB LIBSTDCXX_SUBDIRS "${LIBSTDCXX_PATH}/*")
++  foreach(SUBDIR ${LIBSTDCXX_SUBDIRS})
++    if(IS_DIRECTORY "${SUBDIR}" AND EXISTS "${SUBDIR}/bits/c++config.h")
++      get_filename_component(DIRNAME "${SUBDIR}" NAME)
++      # Verify it's a triplet pattern (contains hyphens), not "experimental" or "bits"
++      string(FIND "${DIRNAME}" "-" HYPHEN_POS)
++      if(HYPHEN_POS GREATER -1)
++        list(APPEND SYSTEM_CXX_INCLUDES "-cxx-isystem" "${SUBDIR}")
++        message(STATUS "Found architecture-specific libstdc++ headers in ${SUBDIR}")
++        break()
++      endif()
++    endif()
++  endforeach()
++endif()
++
+ # Generate required HIPRTC files.
+ FILE(MAKE_DIRECTORY ${HIPRTC_GEN_DIR})
+ generate_hiprtc_header("${HIPRTC_GEN_HEADER}")
+@@ -190,7 +219,7 @@
+ # Note: second command appends define macros at build time.
+ add_custom_command(
+   OUTPUT ${HIPRTC_GEN_PREPROCESSED}
+-  COMMAND ${clang} -O3 --rocm-path=${PROJECT_SOURCE_DIR}/include/.. -std=c++17 -nogpulib --hip-version=${HIP_LIB_VERSION_MAJOR}.${HIP_LIB_VERSION_MINOR} -isystem ${HIP_COMMON_INCLUDE_DIR} -isystem ${PROJECT_SOURCE_DIR}/include -isystem ${PROJECT_BINARY_DIR}/include -isystem ${CMAKE_CURRENT_SOURCE_DIR}/include --cuda-device-only -D__HIPCC_RTC__ -DHIP_VERSION_MAJOR=${HIP_LIB_VERSION_MAJOR} -DHIP_VERSION_MINOR=${HIP_LIB_VERSION_MINOR} -x hip ${HIPRTC_GEN_HEADER} -E -P -o ${HIPRTC_GEN_PREPROCESSED}
++  COMMAND ${clang} -O3 --rocm-path=${PROJECT_SOURCE_DIR}/include/.. -std=c++17 -nogpulib --hip-version=${HIP_LIB_VERSION_MAJOR}.${HIP_LIB_VERSION_MINOR} -isystem ${HIP_COMMON_INCLUDE_DIR} -isystem ${PROJECT_SOURCE_DIR}/include -isystem ${PROJECT_BINARY_DIR}/include -isystem ${CMAKE_CURRENT_SOURCE_DIR}/include ${SYSTEM_CXX_INCLUDES} --cuda-device-only --gcc-toolchain=/usr -D__HIPCC_RTC__ -DHIP_VERSION_MAJOR=${HIP_LIB_VERSION_MAJOR} -DHIP_VERSION_MINOR=${HIP_LIB_VERSION_MINOR} -x hip ${HIPRTC_GEN_HEADER} -E -P -o ${HIPRTC_GEN_PREPROCESSED}
+   COMMAND ${CMAKE_COMMAND} -DHIPRTC_ADD_MACROS=1 -DHIPRTC_HEADERS="${HIPRTC_HEADERS}" -DHIPRTC_PREPROCESSED_FILE=${HIPRTC_GEN_PREPROCESSED} -P ${HIPRTC_CMAKE}
+   DEPENDS ${clang} ${HIPRTC_GEN_HEADER})
+ add_custom_command(
