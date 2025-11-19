@@ -18,7 +18,7 @@ KEYWORDS="amd64 ~arm64"
 IUSE="hardened"
 RESTRICT="test"
 
-BDEPEND=">=dev-lang/go-1.24.0"
+BDEPEND=">=dev-lang/go-1.24.6"
 
 QA_PRESTRIPPED=usr/bin/kubectl
 

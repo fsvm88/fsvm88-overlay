@@ -20,7 +20,7 @@ RESTRICT="test"
 
 RDEPEND="app-containers/cri-tools
 	selinux? ( sec-policy/selinux-kubernetes )"
-BDEPEND=">=dev-lang/go-1.24.0"
+BDEPEND=">=dev-lang/go-1.24.6"
 
 QA_PRESTRIPPED=usr/bin/kubeadm
 
