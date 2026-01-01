@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake desktop
 
@@ -23,7 +23,7 @@ IUSE="wayland"
 RDEPEND="
 	dev-cpp/glibmm:2
 	dev-cpp/gtkmm:3.0
-	dev-cpp/libxmlpp:3.0
+	dev-libs/pugixml
 	dev-libs/boost:=
 	dev-libs/glib:2
 	dev-libs/libsigc++:2
